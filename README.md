@@ -1,15 +1,13 @@
 
 
-# React Flux Dash
-[![Version](https://img.shields.io/npm/v/@4geeksacademy/react-flux-dash.svg)](https://npmjs.org/package/react-flux-dash)
-[![Downloads/week](https://img.shields.io/npm/dw/@4geeksacademy/react-flux-dash.svg)](https://npmjs.org/package/react-flux-dash)
-[![License](https://img.shields.io/npm/l/@4geeksacademy/react-flux-dash.svg)](https://github.com/Techniv/Licenses-for-GitHub/tree/master/GNU-GPL)
+# Flux State
+[![Version](https://img.shields.io/npm/v/alacret/flux-state.svg)](https://npmjs.org/package/flux-state)
+[![Downloads/week](https://img.shields.io/npm/dw/alacret/flux-state.svg)](https://npmjs.org/package/flux-state)
+[![License](https://img.shields.io/npm/l/alacret/flux-state.svg)](https://github.com/Techniv/Licenses-for-GitHub/tree/master/GNU-GPL)
 
 Learning flux is hard, using it is cumbersome. Hopefully it will become easier with this library!
 
 Also, learning redux is harder, so this is state library that make your life easier
-
-Dash are a series of coding guidelines and principles to code in a easy, conventional, clean and expressive way.
 
 The principles and guidelines supporting this Library are:
 
@@ -24,11 +22,11 @@ The principles and guidelines supporting this Library are:
 
 1. Run on your terminal the following command:
 ```sh
-$ npm install @4geeksacademy/react-flux-dash --save
+$ npm install flux-state --save
 ```
 2. To import the library anywhere you would like to use it:
 ```js
-import Flux from '@4geeksacademy/react-flux-dash';
+import Flux from 'flux-state';
 ```
 
 ## Let's build a Flux Workflow for authentication
@@ -36,7 +34,7 @@ import Flux from '@4geeksacademy/react-flux-dash';
 ### 1) First, declare your Store
 
 ```js
-import Flux from '@4geeksacademy/react-flux-dash';
+import Flux from 'flux-state';
 
 class SessionStore extends Flux.DashStore{
     constructor(){
@@ -81,7 +79,8 @@ class View extends React.Component {
 
       logOutEvent(state){
         //DO something with the state or the state of the Store
-        const storeState = SessionStore.getState()
+        const storeState = SessionStore.getState();
+        const eventState = SessionStore.getState("logout");
       }
 
       componentWillUnMount() {
@@ -96,7 +95,7 @@ class View extends React.Component {
 ### 3) Define some action that will trigger the event
 
 ```js
-import Flux from '@4geeksacademy/react-flux-dash';
+import Flux from 'flux-state';
 
 const authenticateAction = (username, password)=> {
       // Don't forget to Validate the data ex: username !=== undefined
