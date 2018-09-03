@@ -1,9 +1,6 @@
 
 
 # Flux State
-[![Version](https://img.shields.io/npm/v/alacret/flux-state.svg)](https://npmjs.org/package/flux-state)
-[![Downloads/week](https://img.shields.io/npm/dw/alacret/flux-state.svg)](https://npmjs.org/package/flux-state)
-[![License](https://img.shields.io/npm/l/alacret/flux-state.svg)](https://github.com/Techniv/Licenses-for-GitHub/tree/master/GNU-GPL)
 
 Learning flux is hard, using it is cumbersome. Hopefully it will become easier with this library!
 
