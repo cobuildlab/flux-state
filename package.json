@@ -1,7 +1,7 @@
 {
   "name": "flux-state",
   "version": "4.0.0",
-  "description": "A Easy State Managment with Flux",
+  "description": "A Easy State Management with Flux",
   "main": "src/index.js",
   "scripts": {
     "build": "webpack --config webpack.config.js --mode production",
@@ -16,21 +16,21 @@
   "author": "Angel Lacret",
   "license": "GPL-3.0",
   "devDependencies": {
-    "@babel/core": "^7.0.1",
+    "@babel/core": "^7.1.6",
     "@babel/preset-env": "^7.1.6",
     "@babel/preset-react": "^7.0.0",
     "babel-jest": "^23.6.0",
-    "babel-loader": "^8.0.2",
+    "babel-loader": "^8.0.4",
     "flux": "^3.1.3",
-    "jest": "^22.4.3",
+    "jest": "^22.4.4",
     "remove-flow-types-loader": "^1.1.0",
-    "webpack": "^4.18.0",
-    "webpack-cli": "^3.1.0",
-    "webpack-dev-server": "^3.1.8"
+    "webpack": "^4.26.0",
+    "webpack-cli": "^3.1.2",
+    "webpack-dev-server": "^3.1.10"
   },
   "dependencies": {
     "flux": "^3.1.3",
-    "rxjs": "^6.3.2"
+    "rxjs": "^6.3.3"
   },
   "jest": {
     "verbose": true,
