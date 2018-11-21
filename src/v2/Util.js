@@ -19,8 +19,6 @@ function validateText(text) {
 export default {
     validateText,
     log: (msg, obj) => {
-        if (!window.DEBUG)
-            return;
         if (obj)
             console.log(msg, obj);
         else

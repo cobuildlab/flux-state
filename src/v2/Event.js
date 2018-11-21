@@ -1,5 +1,5 @@
 import utils from "./Util";
-import {Subject} from 'rxjs/Subject';
+import {Subject} from 'rxjs';
 
 class Event {
     /**
@@ -29,14 +29,6 @@ class Event {
         transformers.forEach(transformer => {
             if (typeof(transformer) !== "function")
                 throw new Error("All the transformers must be functions");
-            // To be removed in version 4
-            // const testResult = transformer({});
-            //
-            // if (typeof(testResult) === "undefined")
-            //     throw new Error(`All the transformers must return a mutated state object and not 'undefined': ${transformer}`);
-            //
-            // if (testResult === null)
-            //     throw new Error(`All the transformers must return a mutated state object and not 'null': ${transformer}`);
         });
 
         this.transformers = transformers;
@@ -52,8 +44,7 @@ class Event {
         utils.log("v2/Event:subscribe");
         if (typeof(subscriber) !== "function")
             throw new Error("subscriber must be a function");
-        const subscription = this.subject.subscribe(subscriber)
-        return subscription;
+        return this.subject.subscribe(subscriber);
     }
 
     /**

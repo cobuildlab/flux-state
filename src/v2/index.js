@@ -5,15 +5,15 @@ const __dispatch = new Dispatcher();
 
 const handleDispatch = ({eventName, eventData}) => {
     utils.log("v2/index:handleDispatch");
-    let atLeastDistpatchOneEvent = false;
+    let atLeastDispatchOneEvent = false;
     allEvents.forEach(event => {
         if (event.name === eventName) {
             event.notify(eventData);
-            atLeastDistpatchOneEvent = true;
+            atLeastDispatchOneEvent = true;
         }
     });
 
-    if(!atLeastDistpatchOneEvent)
+    if (!atLeastDispatchOneEvent)
         throw new Error(`No event: ${eventName} exists in the System`);
 };
 
@@ -26,7 +26,7 @@ __dispatch.register(handleDispatch);
  */
 const dispatchEvent = (eventName, eventData) => {
     utils.log("v2/index:dispatchEvent");
-    const validateEventName = utils.validateText(eventName);
+    utils.validateText(eventName);
     __dispatch.dispatch({eventName, eventData});
 }
 

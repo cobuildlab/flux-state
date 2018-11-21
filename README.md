@@ -13,12 +13,12 @@ Dash are a series of coding guidelines and principles to code in a easy, convent
 
 The principles and guidelines supporting this Library are:
 
-1) Define a Store should be an easy step, keeping the power of a "Single source of thruth"
+1) Define a FluxStore should be an easy step, keeping the power of a "Single source of thruth"
 2) Data and event propagation should be done in a declarative way
 3) Views should be developer in a reactive way.
 4) Multiple Stores are allowed for better organization
-5) We keep flux as it should be unidirectaional, so there is no coupling between the Action and the Views, neither between the Actions and the Store, neither between the Store and the View
-6) The Store state is implicit: The last value of all the events on the Store.
+5) We keep flux as it should be unidirectaional, so there is no coupling between the Action and the Views, neither between the Actions and the FluxStore, neither between the FluxStore and the View
+6) The FluxStore state is implicit: The last value of all the events on the FluxStore.
 
 ## Installation
 
@@ -33,7 +33,7 @@ import Flux from '@4geeksacademy/react-flux-dash';
 
 ## Let's build a Flux Workflow for authentication
 
-### 1) First, declare your Store
+### 1) First, declare your FluxStore
 
 ```js
 import Flux from '@4geeksacademy/react-flux-dash';
@@ -58,7 +58,7 @@ class SessionStore extends Flux.DashStore{
 export default new SessionStore();
 ```
 
-### 2) Registering with the Store changes
+### 2) Registering with the FluxStore changes
 
 ```js
 import React from 'react';
@@ -80,7 +80,7 @@ class View extends React.Component {
       }
 
       logOutEvent(state){
-        //DO something with the state or the state of the Store
+        //DO something with the state or the state of the FluxStore
         const storeState = SessionStore.getState()
       }
 
@@ -133,7 +133,7 @@ class View extends React.Component {
       }
 
       logOutEvent(state){
-        //DO something with the state or the state of the Store
+        //DO something with the state or the state of the FluxStore
         const storeState = SessionStore.getState()
       }
 
@@ -154,9 +154,9 @@ ChangeLog:
 
 #### v 3.0.0
 
-- Add a ```clearState``` method for the Store to set all Values to null
+- Add a ```clearState``` method for the FluxStore to set all Values to null
 - Add a parameter to the subscription, to request the last value of the Event if wanted
-- Add a Helper React View, to subscribe and unsubscribe to the Store wanted
+- Add a Helper React View, to subscribe and unsubscribe to the FluxStore wanted
 
 
 ## Contributors

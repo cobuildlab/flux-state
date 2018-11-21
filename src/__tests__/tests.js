@@ -1,16 +1,16 @@
-import Store from "../v2/Store";
-import Event from "../v2/Event";
-import {dispatchEvent} from '../v2/index';
-import View from "../react";
-
-window.DEBUG = false;
+const test = require("../../dist/flux-state");
+console.log(test);
+console.log(test[0]);
+console.log(typeof test.FluxStore);
+const FluxStore = require("../../dist/flux-state").FluxStore;
+const dispatchEvent = require("../../dist/flux-state").dispatchEvent;
 
 const EVENT_NAME = "SOMETHING_HAPPEND";
 const OTHER_EVENT_NAME = "SOMETHING_ELSE_HAPPEND";
 let testState = undefined;
 
 //
-class TestStore extends Store {
+class TestStore extends FluxStore {
     constructor() {
         super();
         this.addEvent(EVENT_NAME, (state) => {
@@ -249,31 +249,31 @@ test('Valid Subscriber', () => {
     e.notify({"foo": "bar"})
 });
 
-test('InValid event on the Store: Duplicated event Name', () => {
+test('InValid event on the FluxStore: Duplicated event Name', () => {
     expect(() => {
         testStore.addEvent(EVENT_NAME);
     }).toThrow();
 });
 
-test('InValid subscriber on the Store: Subscriber must be a function', () => {
+test('InValid subscriber on the FluxStore: Subscriber must be a function', () => {
     expect(() => {
         testStore.subscribe(EVENT_NAME, 113);
     }).toThrow();
 });
 
-test('InValid subscriber on the Store: Subscriber must be a function', () => {
+test('InValid subscriber on the FluxStore: Subscriber must be a function', () => {
     expect(() => {
         testStore.subscribe(EVENT_NAME, {});
     }).toThrow();
 });
 
-test('InValid subscriber on the Store: Unknown event', () => {
+test('InValid subscriber on the FluxStore: Unknown event', () => {
     expect(() => {
         testStore.subscribe("SOME OTHER EVENT NAME THAT DOES NOT EXISTS");
     }).toThrow();
 });
 
-test('InValid subscriber on the Store: Unknown event', () => {
+test('InValid subscriber on the FluxStore: Unknown event', () => {
     expect(() => {
         testStore.subscribe("SOME OTHER EVENT NAME THAT DOES NOT EXISTS", () => {});
     }).toThrow();
@@ -285,7 +285,7 @@ testAction();
 testStore.clearState();
 const anotherEeventValue = testStore.getState(EVENT_NAME);
 
-test('testState should be null after clearing the Store', () => {
+test('testState should be null after clearing the FluxStore', () => {
     console.log(anotherEeventValue);
     expect(anotherEeventValue).toBe(null);
 });
