@@ -1,42 +1,37 @@
 
 
-# React Flux Dash
-[![Version](https://img.shields.io/npm/v/@4geeksacademy/react-flux-dash.svg)](https://npmjs.org/package/react-flux-dash)
-[![Downloads/week](https://img.shields.io/npm/dw/@4geeksacademy/react-flux-dash.svg)](https://npmjs.org/package/react-flux-dash)
-[![License](https://img.shields.io/npm/l/@4geeksacademy/react-flux-dash.svg)](https://github.com/Techniv/Licenses-for-GitHub/tree/master/GNU-GPL)
+# Flux State
 
 Learning flux is hard, using it is cumbersome. Hopefully it will become easier with this library!
 
 Also, learning redux is harder, so this is state library that make your life easier
 
-Dash are a series of coding guidelines and principles to code in a easy, conventional, clean and expressive way.
-
 The principles and guidelines supporting this Library are:
 
-1) Define a FluxStore should be an easy step, keeping the power of a "Single source of thruth"
+1) Define a Store should be an easy step, keeping the power of a "Single source of thruth"
 2) Data and event propagation should be done in a declarative way
 3) Views should be developer in a reactive way.
 4) Multiple Stores are allowed for better organization
-5) We keep flux as it should be unidirectaional, so there is no coupling between the Action and the Views, neither between the Actions and the FluxStore, neither between the FluxStore and the View
-6) The FluxStore state is implicit: The last value of all the events on the FluxStore.
+5) We keep flux as it should be unidirectaional, so there is no coupling between the Action and the Views, neither between the Actions and the Store, neither between the Store and the View
+6) The Store state is implicit: The last value of all the events on the Store.
 
 ## Installation
 
 1. Run on your terminal the following command:
 ```sh
-$ npm install @4geeksacademy/react-flux-dash --save
+$ npm install flux-state --save
 ```
 2. To import the library anywhere you would like to use it:
 ```js
-import Flux from '@4geeksacademy/react-flux-dash';
+import Flux from 'flux-state';
 ```
 
 ## Let's build a Flux Workflow for authentication
 
-### 1) First, declare your FluxStore
+### 1) First, declare your Store
 
 ```js
-import Flux from '@4geeksacademy/react-flux-dash';
+import Flux from 'flux-state';
 
 class SessionStore extends Flux.DashStore{
     constructor(){
@@ -58,7 +53,7 @@ class SessionStore extends Flux.DashStore{
 export default new SessionStore();
 ```
 
-### 2) Registering with the FluxStore changes
+### 2) Registering with the Store changes
 
 ```js
 import React from 'react';
@@ -80,8 +75,9 @@ class View extends React.Component {
       }
 
       logOutEvent(state){
-        //DO something with the state or the state of the FluxStore
-        const storeState = SessionStore.getState()
+        //DO something with the state or the state of the Store
+        const storeState = SessionStore.getState();
+        const eventState = SessionStore.getState("logout");
       }
 
       componentWillUnMount() {
@@ -96,7 +92,7 @@ class View extends React.Component {
 ### 3) Define some action that will trigger the event
 
 ```js
-import Flux from '@4geeksacademy/react-flux-dash';
+import Flux from 'flux-state';
 
 const authenticateAction = (username, password)=> {
       // Don't forget to Validate the data ex: username !=== undefined
@@ -133,7 +129,7 @@ class View extends React.Component {
       }
 
       logOutEvent(state){
-        //DO something with the state or the state of the FluxStore
+        //DO something with the state or the state of the Store
         const storeState = SessionStore.getState()
       }
 
@@ -154,9 +150,9 @@ ChangeLog:
 
 #### v 3.0.0
 
-- Add a ```clearState``` method for the FluxStore to set all Values to null
+- Add a ```clearState``` method for the Store to set all Values to null
 - Add a parameter to the subscription, to request the last value of the Event if wanted
-- Add a Helper React View, to subscribe and unsubscribe to the FluxStore wanted
+- Add a Helper React View, to subscribe and unsubscribe to the Store wanted
 
 
 ## Contributors
