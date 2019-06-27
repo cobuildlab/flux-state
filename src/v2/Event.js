@@ -1,5 +1,6 @@
 import utils from "./Util";
 import {Subject} from 'rxjs';
+import {log} from '@cobuildlab/pure-logger';
 
 class Event {
     /**
@@ -11,9 +12,9 @@ class Event {
      * @throws an Error if the transformers return an Undefined or Null value
      */
     constructor(name, transformers) {
-        utils.log("v2/Event:constructor");
+        log("v2/Event:constructor");
         this.name = utils.validateText(name);
-        this.transformers = new Array();
+        this.transformers = [];
         this.value = null;
         this.subject = new Subject();
 
@@ -23,7 +24,7 @@ class Event {
         if (!Array.isArray(transformers))
             throw new Error("Transformers must be an Array");
 
-        if (transformers.length == 0)
+        if (transformers.length === 0)
             throw new Error("Transformers Array shouldn't be empty");
 
         transformers.forEach(transformer => {
@@ -35,25 +36,25 @@ class Event {
     }
 
     /**
-     * subscribe to theis event notifications
+     * subscribe to this event notifications
      * @param subscriber The function no be executed when this events its fired
-     * @return subscription An object representing the subscription to the Event
+     * @return Subscription An object representing the subscription to the Event
      * @throws an Error if the subscriber is not a function
      */
     subscribe(subscriber) {
-        utils.log("v2/Event:subscribe");
+        log("v2/Event:subscribe");
         if (typeof(subscriber) !== "function")
             throw new Error("subscriber must be a function");
         return this.subject.subscribe(subscriber);
     }
 
     /**
-     * It fires the ocurrency of an event, execute every transformation and  every subscriber
+     * It fires the occurrence of an event, execute every transformation and  every subscriber
      * @param eventData the data of the event
      */
     notify(eventData) {
-        utils.log("v2/Event:notify");
-        if (this.subject.observers.length == 0) {
+        log("v2/Event:notify");
+        if (this.subject.observers.length === 0) {
             console.warn(`No subscriber for ${this.name}, no side effects generated`);
         }
 

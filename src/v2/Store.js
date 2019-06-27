@@ -2,10 +2,11 @@ import Event from './Event';
 import {allEvents} from './index';
 import utils from './Util';
 import * as R from 'ramda'
+import {log} from '@cobuildlab/pure-logger';
 
 class Store {
   constructor() {
-    utils.log("v2/Store:constructor");
+    log("v2/Store:constructor");
     this.events = [];
   }
 
@@ -16,7 +17,7 @@ class Store {
    * @throws an Error if there is already an event with the same name
    */
   addEvent(eventName, ...transformers) {
-    utils.log("v2/Store:addEvent");
+    log("v2/Store:addEvent");
     const validateEventName = utils.validateText(eventName);
 
     //Check for duplicated names on the Store
@@ -44,7 +45,7 @@ class Store {
    * @throws an Error if the subscriber is not a function
    */
   subscribe(eventName, subscriber, receiveLastValue = false) {
-    utils.log("v2/Store:subscribe");
+    log("v2/Store:subscribe");
     const validatedEventName = utils.validateText(eventName);
 
     if (typeof (subscriber) !== `function`)
@@ -67,7 +68,7 @@ class Store {
    * This is the last know value of each event
    */
   getState(eventName) {
-    utils.log("v2/Store:getState");
+    log("v2/Store:getState");
     if (!(eventName === undefined || eventName === null))
       return this.__getEventState(eventName);
 
@@ -85,7 +86,7 @@ class Store {
    * This is the last know value of the event
    */
   __getEventState(eventName) {
-    utils.log("v2/Store:__getEventState");
+    log("v2/Store:__getEventState");
     for (let i = 0; i < this.events.length; i++)
       if (this.events[i].name === eventName)
         return R.clone(this.events[i].value);

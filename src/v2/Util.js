@@ -3,25 +3,25 @@
  * Non null, non undefined, non empty
  * @param text The Text to be validated
  * @returns {*} the Text if it is Valid
- * @thro
+ * @throws
  */
 function validateText(text) {
-    if (typeof (text) === "undefined")
-        throw new Error("text can't be undefined");
-    if (text === null)
-        throw new Error("text can't be null");
-    if (text === "")
-        throw new Error("text can't be an empty string");
+  if (typeof (text) === "undefined")
+    throw new Error("text can't be undefined");
+  if (text === null)
+    throw new Error("text can't be null");
+  if (text === "")
+    throw new Error("text can't be an empty string");
 
-    return text;
+  return text;
 }
 
 export default {
-    validateText,
-    log: (msg, obj) => {
-        if (obj)
-            console.log(msg, obj);
-        else
-            console.log(msg)
-    }
+  validateText,
+  log: (msg, obj) => {
+    if (obj)
+      console.log(msg, obj);
+    else
+      console.log(msg)
+  }
 };

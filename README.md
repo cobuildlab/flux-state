@@ -19,7 +19,7 @@ The principles and guidelines supporting this Library are:
 
 1. Run on your terminal the following command:
 ```sh
-$ npm install flux-state --save
+$ npm install @cobuildlab/flux-state --save
 ```
 2. To import the library anywhere you would like to use it:
 
@@ -164,6 +164,7 @@ ChangeLog:
 #### v 4.1.0
 
 - `store.getState()` returns a clone of the state object
+- Migrated to `@cobuildlab/flux-state`
 
 #### v 3.0.0
 

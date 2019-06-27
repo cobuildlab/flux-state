@@ -1,20 +1,21 @@
 import {Dispatcher} from 'flux';
 import utils from "./Util";
+import {log} from '@cobuildlab/pure-logger';
 
 const __dispatch = new Dispatcher();
 
 const handleDispatch = ({eventName, eventData}) => {
-    utils.log("v2/index:handleDispatch");
-    let atLeastDispatchOneEvent = false;
-    allEvents.forEach(event => {
-        if (event.name === eventName) {
-            event.notify(eventData);
-            atLeastDispatchOneEvent = true;
-        }
-    });
+  log("v2/index:handleDispatch");
+  let atLeastDispatchOneEvent = false;
+  allEvents.forEach(event => {
+    if (event.name === eventName) {
+      event.notify(eventData);
+      atLeastDispatchOneEvent = true;
+    }
+  });
 
-    if (!atLeastDispatchOneEvent)
-        throw new Error(`No event: ${eventName} exists in the System`);
+  if (!atLeastDispatchOneEvent)
+    throw new Error(`No event: ${eventName} exists in the System`);
 };
 
 __dispatch.register(handleDispatch);
@@ -25,11 +26,11 @@ __dispatch.register(handleDispatch);
  * @param eventData The data to be passed
  */
 const dispatchEvent = (eventName, eventData) => {
-    utils.log("v2/index:dispatchEvent");
-    utils.validateText(eventName);
-    __dispatch.dispatch({eventName, eventData});
-}
+  log("v2/index:dispatchEvent");
+  utils.validateText(eventName);
+  __dispatch.dispatch({eventName, eventData});
+};
 
-const allEvents = new Array();
+const allEvents = [];
 
 export {allEvents, dispatchEvent};
