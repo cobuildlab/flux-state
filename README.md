@@ -8,11 +8,11 @@ Also, learning redux is harder, so this is state library that make your life eas
 
 The principles and guidelines supporting this Library are:
 
-1) Define a Store should be an easy step, keeping the power of a "Single source of thruth"
+1) Define a Store should be an easy step, keeping the power of a "Single source of truth"
 2) Data and event propagation should be done in a declarative way
 3) Views should be developer in a reactive way.
 4) Multiple Stores are allowed for better organization
-5) We keep flux as it should be unidirectaional, so there is no coupling between the Action and the Views, neither between the Actions and the Store, neither between the Store and the View
+5) We keep flux as it should be unidirectional, so there is no coupling between the Action and the Views, neither between the Actions and the Store, neither between the Store and the View
 6) The Store state is implicit: The last value of all the events on the Store.
 
 ## Installation
@@ -22,7 +22,8 @@ The principles and guidelines supporting this Library are:
 $ npm install flux-state --save
 ```
 2. To import the library anywhere you would like to use it:
-```js
+
+```javascript
 import Flux from 'flux-state';
 ```
 
@@ -30,58 +31,63 @@ import Flux from 'flux-state';
 
 ### 1) First, declare your Store
 
-```js
+```javascript
 import Flux from 'flux-state';
+
+export const LOGOUT_EVENT = 'onLogout';
+export const LOGIN_EVENT = 'onLogin';
+export const SESSION_EVENT = 'onSession';
 
 class SessionStore extends Flux.DashStore{
     constructor(){
         super();
         // Declare an Event
-        this.addEvent("onLogout");
-        // Or Declare an event with some imutable transformation logic
-        this.addEvent("login", (state) => {
+        this.addEvent(LOGOUT_EVENT);
+        // Or Declare an event with some immutable transformation logic
+        this.addEvent(LOGIN_EVENT, (state) => {
             // Do something with the data before propagating the Event
             return Object.assign(state, {"key": "value"})
         });
         // Or Declare an event with some plain transformation logic
-        this.addEvent("login", (state) => {
+        this.addEvent(SESSION_EVENT, (state) => {
             state.some_other_property = "Some other Data";
             return Object.assign(state, {"key": "value"})
         });
     }
 }
-export default new SessionStore();
+
+const sessionStore = new SessionStore();
+export {sessionStore};
 ```
 
 ### 2) Registering with the Store changes
 
 ```js
 import React from 'react';
-import SessionStore from '/path/to/store';
+import {sessionStore, LOGIN_EVENT, LOGOUT_EVENT, SESSION_EVENT } from '/path/to/store';
 
-class View extends React.Component {
+export class View extends React.Component {
       constructor(){
           super();
+          const user = sessionStore.getState(SESSION_EVENT);
+          this.state = {
+            isLogged: !!user
+          }
       }
 
       componentDidMount() {
-          const me = this;
-          this.loginSubscription = SessionStore.subscribe("login", (state) => {
-              // Do something usefull with the Event Data
-              me.userName = state.user.name;
+          this.loginSubscription = sessionStore.subscribe(LOGIN_EVENT, (state) => {
+              // Do something useful with the Event Data
+              this.setState({some: state.some});
           });
           // Register some method
-          this.logoutSubscription = SessionStore.subscribe("logout", this.logOutEvent().bind(this));
-      }
-
-      logOutEvent(state){
-        //DO something with the state or the state of the Store
-        const storeState = SessionStore.getState();
-        const eventState = SessionStore.getState("logout");
+          this.logoutSubscription = sessionStore.subscribe(LOGOUT_EVENT, this.logOutEvent().bind(this));
       }
 
       componentWillUnMount() {
           // Don't forget to release the subscription
+          // Save time by using react bindings
+          // See (react-flux-state)[https://github.com/cobuildlab/react-flux-state] 
           this.loginSubscription.unsubscribe();
           this.logoutSubscription.unsubscribe();
       }
@@ -89,48 +95,55 @@ class View extends React.Component {
 
 ```
 
-### 3) Define some action that will trigger the event
+### 3) Define some actions that will trigger the event
 
 ```js
 import Flux from 'flux-state';
+import {LOGIN_EVENT, LOGIN_ERROR} from '/path/to/store';
 
-const authenticateAction = (username, password)=> {
+const authenticateAction = async (username, password)=> {
       // Don't forget to Validate the data ex: username !=== undefined
       let dataToSave = {
           authenticated: true
       }
-      Flux.dispatchEvent('login', dataToSave)
+      
+      try {
+        await authenticate(username, password)
+      }catch (e) {
+          Flux.dispatchEvent(LOGIN_ERROR, e.message);
+      }
+      Flux.dispatchEvent(LOGIN_EVENT, dataToSave);
 }
 
-export default {authenticateAction};
+export {authenticateAction};
 ```
 
 ### 4) Glue all together using the Action from the View
 
 
-```js
+```javascript
 import React from 'react';
-import SessionStore from '/path/to/store';
 import {authenticateAction} from 'path/to/action';
+import {sessionStore, LOGIN_EVENT, LOGOUT_EVENT, SESSION_EVENT } from '/path/to/store';
 
-class View extends React.Component {
+export class View extends React.Component {
       constructor(){
           super();
       }
 
       componentDidMount() {
           const me = this;
-          this.loginSubscription = SessionStore.subscribe("login", (state) => {
-              // Do something usefull with the Event Data
+          this.loginSubscription = sessionStore.subscribe(LOGIN_EVENT, (state) => {
+              // Do something useful with the Event Data
               me.userName = state.user.name;
           });
           // Register some method
-          this.logoutSubscription = SessionStore.subscribe("logout", this.logOutEvent().bind(this));
+          this.logoutSubscription = sessionStore.subscribe(LOGOUT_EVENT, this.logOutEvent().bind(this));
       }
 
       logOutEvent(state){
         //DO something with the state or the state of the Store
-        const storeState = SessionStore.getState()
+        const storeState = sessionStore.getState(SESSION_EVENT);
       }
 
       componentWillUnMount() {
@@ -147,6 +160,10 @@ class View extends React.Component {
 
 ```
 ChangeLog:
+
+#### v 4.1.0
+
+- `store.getState()` returns a clone of the state object
 
 #### v 3.0.0
 
