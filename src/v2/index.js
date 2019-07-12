@@ -1,11 +1,11 @@
 import {Dispatcher} from 'flux';
 import utils from "./Util";
-import {log} from '@cobuildlab/pure-logger';
+// import {log} from '@cobuildlab/pure-logger';
 
 const __dispatch = new Dispatcher();
 
 const handleDispatch = ({eventName, eventData}) => {
-  log("v2/index:handleDispatch");
+  // log("flux-state:index:handleDispatch:", eventName);
   let atLeastDispatchOneEvent = false;
   allEvents.forEach(event => {
     if (event.name === eventName) {
@@ -26,7 +26,7 @@ __dispatch.register(handleDispatch);
  * @param eventData The data to be passed
  */
 const dispatchEvent = (eventName, eventData) => {
-  log("v2/index:dispatchEvent");
+  // log("flux-state:index:dispatchEvent:", eventName);
   utils.validateText(eventName);
   __dispatch.dispatch({eventName, eventData});
 };

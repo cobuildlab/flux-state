@@ -2,11 +2,11 @@ import Event from './Event';
 import {allEvents} from './index';
 import utils from './Util';
 import * as R from 'ramda'
-import {log} from '@cobuildlab/pure-logger';
+// import {log} from '@cobuildlab/pure-logger';
 
 class Store {
   constructor() {
-    log("v2/Store:constructor");
+    // log("flux-state:Store:constructor");
     this.events = [];
   }
 
@@ -17,7 +17,7 @@ class Store {
    * @throws an Error if there is already an event with the same name
    */
   addEvent(eventName, ...transformers) {
-    log("v2/Store:addEvent");
+    // log("flux-state:Store:addEvent:", eventName);
     const validateEventName = utils.validateText(eventName);
 
     //Check for duplicated names on the Store
@@ -45,7 +45,7 @@ class Store {
    * @throws an Error if the subscriber is not a function
    */
   subscribe(eventName, subscriber, receiveLastValue = false) {
-    log("v2/Store:subscribe");
+    // log("flux-state:Store:subscribe:", eventName);
     const validatedEventName = utils.validateText(eventName);
 
     if (typeof (subscriber) !== `function`)
@@ -68,7 +68,7 @@ class Store {
    * This is the last know value of each event
    */
   getState(eventName) {
-    log("v2/Store:getState");
+    // log("flux-state:Store:getState:", eventName);
     if (!(eventName === undefined || eventName === null))
       return this.__getEventState(eventName);
 
@@ -86,7 +86,7 @@ class Store {
    * This is the last know value of the event
    */
   __getEventState(eventName) {
-    log("v2/Store:__getEventState");
+    // log("flux-state:Store:__getEventState:", eventName);
     for (let i = 0; i < this.events.length; i++)
       if (this.events[i].name === eventName)
         return R.clone(this.events[i].value);
@@ -97,7 +97,7 @@ class Store {
    * Clears all the values of the events in the Store
    */
   clearState() {
-    utils.log("v2/Store:clearState");
+    // log("flux-state:Store:clearState");
     this.events.forEach(event => event.value = null);
   }
 }
