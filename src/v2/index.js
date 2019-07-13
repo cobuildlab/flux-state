@@ -22,7 +22,7 @@ const handleDispatch = ({eventName, eventData}) => {
 
   setTimeout(() => {
     notifiableEvents.forEach(event => event.notify(eventData));
-    log(`flux-state:dispatched:`, notifiableEvents.map(event => event.name));
+    log(`flux-state:dispatched:`, ...notifiableEvents.map(event => event.name));
   }, 5);
 };
 
