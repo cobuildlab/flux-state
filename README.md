@@ -161,12 +161,16 @@ export class View extends React.Component {
 ```
 ChangeLog:
 
-#### v 4.1.0
+#### v 1.1.*
+
+- Now `Flux.dispatch` uses setTimeout to avoid dispatching in the middle of a Dispatch
+
+#### v 1.0.1
 
 - `store.getState()` returns a clone of the state object
 - Migrated to `@cobuildlab/flux-state`
 
-#### v 3.0.0
+#### v 0.0.3
 
 - Add a ```clearState``` method for the Store to set all Values to null
 - Add a parameter to the subscription, to request the last value of the Event if wanted
