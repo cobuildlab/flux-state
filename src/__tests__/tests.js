@@ -1,115 +1,114 @@
-const test = require("../../dist/flux-state");
-console.log(test);
-console.log(test[0]);
-console.log(typeof test.FluxStore);
-const FluxStore = require("../../dist/flux-state").FluxStore;
-const dispatchEvent = require("../../dist/flux-state").dispatchEvent;
+import Flux from '../index';
+import Event from '../v2/Event';
 
-const EVENT_NAME = "SOMETHING_HAPPEND";
-const OTHER_EVENT_NAME = "SOMETHING_ELSE_HAPPEND";
-let testState = undefined;
+test('Everything should be ready to work', () => {
+  console.log(Flux);
+  expect(Flux).not.toBe(null);
+  expect(Flux).not.toBe(undefined);
+});
+
+
+const EVENT_NAME = "SOMETHING_HAPPEN";
+const OTHER_EVENT_NAME = "SOMETHING_ELSE_HAPPEN";
 
 //
-class TestStore extends FluxStore {
-    constructor() {
-        super();
-        this.addEvent(EVENT_NAME, (state) => {
-            // Transform the state
-            return Object.assign(state, {"key": "value"})
-        });
-        this.addEvent(OTHER_EVENT_NAME);
-    }
+
+class TestStore extends Flux.DashStore {
+  constructor() {
+    super(null);
+    this.addEvent(EVENT_NAME, (state) => {
+      // Transform the state
+      return Object.assign(state, {"key": "value"})
+    });
+    this.addEvent(OTHER_EVENT_NAME);
+  }
 }
 
 const testStore = new TestStore();
+let testState = undefined;
 
 class TestView {
-
-    componentWillMount() {
-        this.eventSubscription = testStore.subscribe(EVENT_NAME, (state) => {
-            testState = state;
-        });
-    }
-
-    componentWillUnMount() {
-        this.eventSubscription.unsubscribe();
-    }
+  componentWillMount() {
+    this.eventSubscription = testStore.subscribe(EVENT_NAME, (state) => {
+      testState = state;
+    });
+  }
 }
+
+const testAction = () => {
+  Flux.dispatchEvent(EVENT_NAME, {"foo": "bar"});
+};
 
 const testView = new TestView();
 testView.componentWillMount();
-
-const testAction = () => {
-    dispatchEvent(EVENT_NAME, {"foo": "bar"});
-};
-//
 testAction();
 const storeValue = testStore.getState();
 const eventValue = testStore.getState(EVENT_NAME);
 
 
-test('testState should throw error for eventName non existen', () => {
-    expect(() => {
-        testStore.getState("SOME other thing that does not exists");
-    }).toThrow();
+// TESTS
+test('testStore should throw error for eventName non existent', () => {
+  expect(() => {
+    testStore.getState("SOME other EVENT NAME that does not exists");
+  }).toThrow();
 });
 
 test('testState should containt eventData', () => {
-    console.log(eventValue);
-    expect(eventValue).toEqual(expect.objectContaining({
-        foo: expect.any(String)
-    }));
+  console.log(eventValue);
+  expect(eventValue).toEqual(expect.objectContaining({
+    foo: expect.any(String)
+  }));
 });
 
-test('testState should containt eventData', () => {
-    console.log(testState);
-    expect(testState).toEqual(expect.objectContaining({
-        foo: expect.any(String)
-    }));
+test('testState should contain eventData', () => {
+  console.log(testState);
+  expect(testState).toEqual(expect.objectContaining({
+    foo: expect.any(String)
+  }));
 });
 
-test('testState should containt trasnformer Data', () => {
-    console.log(testState);
-    expect(testState).toEqual(expect.objectContaining({
-        key: expect.any(String)
-    }));
+test('testState should contain transformer Data', () => {
+  console.log(testState);
+  expect(testState).toEqual(expect.objectContaining({
+    key: expect.any(String)
+  }));
 });
-
+//
 test('value should containt all events Data', () => {
-    console.log(storeValue);
-    expect(storeValue).toEqual(expect.objectContaining({
-        [EVENT_NAME]: expect.any(Object)
-    }));
+  console.log(storeValue);
+  expect(storeValue).toEqual(expect.objectContaining({
+    [EVENT_NAME]: expect.any(Object)
+  }));
 });
 
 test('Event Name must Exist', () => {
-    expect(() => {
-        dispatchEvent("SOME EVENT THAT DOES NOT EXISTS", {})
-    }).toThrow();
+  expect(() => {
+    Flux.dispatchEvent("SOME EVENT THAT DOES NOT EXISTS", {})
+  }).toThrow();
 });
 
-test('InValid Event Name ', () => {
-    expect(() => {
-        dispatchEvent("", {})
-    }).toThrow();
+test('InValid Event Name: dispatching a blank string', () => {
+  expect(() => {
+    Flux.dispatchEvent("", {})
+  }).toThrow();
 });
 
-test('InValid Event Name ', () => {
-    expect(() => {
-        dispatchEvent(null, {})
-    }).toThrow();
+test('InValid Event Name: dispatching null ', () => {
+  expect(() => {
+    Flux.dispatchEvent(null, {})
+  }).toThrow();
 });
 
-test('InValid Event Name ', () => {
-    expect(() => {
-        dispatchEvent(undefined, {})
-    }).toThrow();
+test('InValid Event Name: dispatching undefined ', () => {
+  expect(() => {
+    Flux.dispatchEvent(undefined, {})
+  }).toThrow();
 });
 
-test('InValid Event Name ', () => {
-    expect(() => {
-        new Event("");
-    }).toThrow();
+test('InValid Event Name: creating a blank name event ', () => {
+  expect(() => {
+    new Event("");
+  }).toThrow();
 });
 
 test('InValid Event Name ', () => {
@@ -124,20 +123,19 @@ test('InValid Event Name ', () => {
     }).toThrow();
 });
 
-test('InValid Transformers', () => {
+test('InValid Transformers: not a function but an object', () => {
     expect(() => {
         new Event("EVENT", {});
     }).toThrow();
 });
 
-
-test('InValid Transformers', () => {
+test('InValid Transformers: not a function but a number', () => {
     expect(() => {
         new Event("EVENT", 123);
     }).toThrow();
 });
 
-test('InValid Transformers', () => {
+test('InValid Transformers: : not a function but an empty string', () => {
     expect(() => {
         new Event("EVENT", "");
     }).toThrow();
@@ -170,18 +168,6 @@ test('InValid Transformers', () => {
 test('InValid Transformers', () => {
     expect(() => {
         new Event("EVENT", [{}]);
-    }).toThrow();
-});
-
-test('InValid Transformers', () => {
-    expect(() => {
-        new Event("EVENT", [() => undefined]);
-    }).toThrow();
-});
-
-test('InValid Transformers', () => {
-    expect(() => {
-        new Event("EVENT", [() => null]);
     }).toThrow();
 });
 
@@ -292,7 +278,7 @@ test('testState should be null after clearing the FluxStore', () => {
 
 
 testAction();
-test('Should call the subscriber inmediatly', () => {
+test('Should call the subscriber immediately', () => {
     testStore.subscribe(EVENT_NAME, (data) => {
         console.log("EUREKA");
         expect(data).toEqual(expect.objectContaining({
@@ -300,31 +286,3 @@ test('Should call the subscriber inmediatly', () => {
         }));
     }, true);
 });
-
-
-testView.componentWillUnMount();
-
-
-
-class TestReactView extends View {
-
-    constructor(props){
-        super(props);
-        this.subscribe(testStore, EVENT_NAME, (data) => {
-            console.log("EUREKA 2");
-        })
-    }
-}
-
-const reactView = new TestReactView();
-console.log("REACT",reactView.subscriptions);
-console.log("REACT",reactView.toBeSubscribed);
-console.log("REACT",reactView.hasBeenUnmounted);
-reactView.componentDidMount();
-console.log("REACT",reactView.subscriptions);
-console.log("REACT",reactView.toBeSubscribed);
-console.log("REACT",reactView.hasBeenUnmounted);
-reactView.componentWillUnmount();
-console.log("REACT",reactView.subscriptions);
-console.log("REACT",reactView.toBeSubscribed);
-console.log("REACT",reactView.hasBeenUnmounted);

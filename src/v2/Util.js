@@ -18,10 +18,4 @@ function validateText(text) {
 
 export default {
   validateText,
-  log: (msg, obj) => {
-    if (obj)
-      console.log(msg, obj);
-    else
-      console.log(msg)
-  }
 };

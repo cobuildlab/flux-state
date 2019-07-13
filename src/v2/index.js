@@ -1,21 +1,31 @@
 import {Dispatcher} from 'flux';
 import utils from "./Util";
-// import {log} from '@cobuildlab/pure-logger';
+import {log} from '@cobuildlab/pure-logger';
 
 const __dispatch = new Dispatcher();
 
 const handleDispatch = ({eventName, eventData}) => {
   // log("flux-state:index:handleDispatch:", eventName);
   let atLeastDispatchOneEvent = false;
+  const notifyiablesEvents = [];
   allEvents.forEach(event => {
     if (event.name === eventName) {
-      event.notify(eventData);
+      // Exploring setting this function on async under a promise
+      // event.notify(eventData);
+      notifyiablesEvents.push(event);
       atLeastDispatchOneEvent = true;
     }
   });
 
   if (!atLeastDispatchOneEvent)
     throw new Error(`No event: ${eventName} exists in the System`);
+
+  const promise = new Promise((resolve) => {
+    notifyiablesEvents.forEach(event => event.notify(eventData));
+    resolve(notifyiablesEvents.map(event => event.name));
+  });
+  promise.then(eventNames => log(`flux-state:dispatched:`, eventNames));
+  return promise;
 };
 
 __dispatch.register(handleDispatch);
