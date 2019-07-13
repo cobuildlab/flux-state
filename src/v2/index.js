@@ -7,12 +7,12 @@ const __dispatch = new Dispatcher();
 const handleDispatch = ({eventName, eventData}) => {
   // log("flux-state:index:handleDispatch:", eventName);
   let atLeastDispatchOneEvent = false;
-  const notifyiablesEvents = [];
+  const notifiableEvents = [];
   allEvents.forEach(event => {
     if (event.name === eventName) {
       // Exploring setting this function on async under a promise
       // event.notify(eventData);
-      notifyiablesEvents.push(event);
+      notifiableEvents.push(event);
       atLeastDispatchOneEvent = true;
     }
   });
@@ -20,12 +20,10 @@ const handleDispatch = ({eventName, eventData}) => {
   if (!atLeastDispatchOneEvent)
     throw new Error(`No event: ${eventName} exists in the System`);
 
-  const promise = new Promise((resolve) => {
-    notifyiablesEvents.forEach(event => event.notify(eventData));
-    resolve(notifyiablesEvents.map(event => event.name));
-  });
-  promise.then(eventNames => log(`flux-state:dispatched:`, eventNames));
-  return promise;
+  setTimeout(() => {
+    notifiableEvents.forEach(event => event.notify(eventData));
+    log(`flux-state:dispatched:`, notifiableEvents.map(event => event.name));
+  }, 5);
 };
 
 __dispatch.register(handleDispatch);
