@@ -1,5 +1,7 @@
 import utils from "./Util";
 import {Subject} from 'rxjs';
+import * as R from 'ramda';
+
 // import {log} from '@cobuildlab/pure-logger';
 
 class Event {
@@ -63,7 +65,7 @@ class Event {
       data = transformer(data);
     });
     this.value = data;
-    this.subject.next(this.value);
+    this.subject.next(R.clone(this.value));
   }
 
 }

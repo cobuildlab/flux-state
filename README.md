@@ -161,9 +161,13 @@ export class View extends React.Component {
 ```
 ChangeLog:
 
+#### v 1.1.5
+
+- Notification for events are now clones from original Data
+
 #### v 1.1.4
 
-- Rollback of async dispatches
+- Rollback of async dispatches: They will stay sync for now
 
 #### v 1.1.3
 

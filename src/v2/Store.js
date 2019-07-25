@@ -1,7 +1,8 @@
 import Event from './Event';
 import {allEvents} from './index';
 import utils from './Util';
-import * as R from 'ramda'
+import * as R from 'ramda';
+
 // import {log} from '@cobuildlab/pure-logger';
 
 class Store {
@@ -76,9 +77,9 @@ class Store {
     this.events.forEach(event => {
       const eventState = event.value;
       const eventName = event.name;
-      state = Object.assign(state, {[eventName]: eventState})
+      state = Object.assign(state, {[eventName]: R.clone(eventState)})
     });
-    return R.clone(state);
+    return state;
   }
 
   /**
