@@ -161,7 +161,11 @@ export class View extends React.Component {
 ```
 ChangeLog:
 
-#### v 1.1.*
+#### v 1.1.4
+
+- Rollback of async dispatches
+
+#### v 1.1.3
 
 - Now `Flux.dispatch` uses setTimeout to avoid dispatching in the middle of a Dispatch
 
