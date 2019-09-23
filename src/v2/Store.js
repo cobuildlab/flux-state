@@ -40,10 +40,10 @@ class Store {
   /**
    * Create and Add a new Event to this store Events list
    * @param eventName
-   * @param transformers
+   * @param reducers
    * @param initialValue
    */
-  addFluxEvent({eventName = null, transformers = [], initialValue = null}) {
+  addFluxEvent({eventName = null, reducers = [], initialValue = null}) {
     // log("flux-state:Store:addEvent:", eventName);
     const validateEventName = utils.validateText(eventName);
 
@@ -54,8 +54,8 @@ class Store {
       }
     });
     let e;
-    if (transformers.length > 0)
-      e = new Event(eventName, transformers);
+    if (reducers.length > 0)
+      e = new Event(eventName, reducers);
     else
       e = new Event(eventName);
     if (initialValue)

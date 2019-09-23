@@ -24,7 +24,7 @@ $ npm install @cobuildlab/flux-state --save
 2. To import the library anywhere you would like to use it:
 
 ```javascript
-import Flux from 'flux-state';
+import Flux from '@cobuildlab/flux-state';
 ```
 
 ## Let's build a Flux Workflow for authentication
@@ -32,11 +32,12 @@ import Flux from 'flux-state';
 ### 1) First, declare your Store
 
 ```javascript
-import Flux from 'flux-state';
+import Flux from '@cobuildlab/flux-state';
 
 export const LOGOUT_EVENT = 'onLogout';
 export const LOGIN_EVENT = 'onLogin';
 export const SESSION_EVENT = 'onSession';
+export const NEW_EVENT = 'onEvent';
 
 class SessionStore extends Flux.DashStore{
     constructor(){
@@ -53,6 +54,8 @@ class SessionStore extends Flux.DashStore{
             state.some_other_property = "Some other Data";
             return Object.assign(state, {"key": "value"})
         });
+        // You can also provide initial Value to  the events
+        this.addEvent({eventName: NEW_EVENT, reducers:[], initialValue: {foo: 'bar'} });
     }
 }
 
@@ -160,6 +163,12 @@ export class View extends React.Component {
 
 ```
 ChangeLog:
+
+#### v 1.2.1
+
+- add `addFluxEvent` to the store, to provide `initialValue`
+- add `addFluxEvent` to the store, to change `transformers` for a most common name: `reducers`
+- add `addFluxEvent` to the store, to provide named parameters
 
 #### v 1.1.5
 
