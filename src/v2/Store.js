@@ -36,6 +36,34 @@ class Store {
     allEvents.push(e);
   }
 
+
+  /**
+   * Create and Add a new Event to this store Events list
+   * @param eventName
+   * @param transformers
+   * @param initialValue
+   */
+  addFluxEvent({eventName = null, transformers = [], initialValue = null}) {
+    // log("flux-state:Store:addEvent:", eventName);
+    const validateEventName = utils.validateText(eventName);
+
+    //Check for duplicated names on the Store
+    this.events.forEach(event => {
+      if (event.name === validateEventName) {
+        throw new Error(`STORE: An event named: ${validateEventName} already exists on the Store`);
+      }
+    });
+    let e;
+    if (transformers.length > 0)
+      e = new Event(eventName, transformers);
+    else
+      e = new Event(eventName);
+    if (initialValue)
+      e.value = initialValue;
+    this.events.push(e);
+    allEvents.push(e);
+  }
+
   /**
    * Subscribe to an Event to receive their updates
    * @param eventName The Event Name to which you want to subscribe

@@ -10,6 +10,7 @@ test('Everything should be ready to work', () => {
 
 const EVENT_NAME = "SOMETHING_HAPPEN";
 const OTHER_EVENT_NAME = "SOMETHING_ELSE_HAPPEN";
+const NEW_FLUX_EVENT_NAME = "SOMETHING_NEW_HAPPEND";
 
 //
 
@@ -21,6 +22,7 @@ class TestStore extends Flux.DashStore {
       return Object.assign(state, {"key": "value"})
     });
     this.addEvent(OTHER_EVENT_NAME);
+    this.addFluxEvent({eventName: NEW_FLUX_EVENT_NAME, initialValue: 1});
   }
 }
 
@@ -44,9 +46,14 @@ testView.componentWillMount();
 testAction();
 const storeValue = testStore.getState();
 const eventValue = testStore.getState(EVENT_NAME);
+const fluxEventValue = testStore.getState(NEW_FLUX_EVENT_NAME);
 
 
 // TESTS
+test('testStore should have an initial Value', () => {
+  expect(fluxEventValue).toEqual(1);
+});
+
 test('testStore should throw error for eventName non existent', () => {
   expect(() => {
     testStore.getState("SOME other EVENT NAME that does not exists");
@@ -112,157 +119,158 @@ test('InValid Event Name: creating a blank name event ', () => {
 });
 
 test('InValid Event Name ', () => {
-    expect(() => {
-        new Event(null);
-    }).toThrow();
+  expect(() => {
+    new Event(null);
+  }).toThrow();
 });
 
 test('InValid Event Name ', () => {
-    expect(() => {
-        new Event(undefined);
-    }).toThrow();
+  expect(() => {
+    new Event(undefined);
+  }).toThrow();
 });
 
 test('InValid Transformers: not a function but an object', () => {
-    expect(() => {
-        new Event("EVENT", {});
-    }).toThrow();
+  expect(() => {
+    new Event("EVENT", {});
+  }).toThrow();
 });
 
 test('InValid Transformers: not a function but a number', () => {
-    expect(() => {
-        new Event("EVENT", 123);
-    }).toThrow();
+  expect(() => {
+    new Event("EVENT", 123);
+  }).toThrow();
 });
 
 test('InValid Transformers: : not a function but an empty string', () => {
-    expect(() => {
-        new Event("EVENT", "");
-    }).toThrow();
+  expect(() => {
+    new Event("EVENT", "");
+  }).toThrow();
 });
 
 test('InValid Transformers', () => {
-    expect(() => {
-        new Event("EVENT", () => undefined);
-    }).toThrow();
+  expect(() => {
+    new Event("EVENT", () => undefined);
+  }).toThrow();
 });
 
 test('InValid Transformers', () => {
-    expect(() => {
-        new Event("EVENT", [""]);
-    }).toThrow();
+  expect(() => {
+    new Event("EVENT", [""]);
+  }).toThrow();
 });
 
 test('InValid Transformers', () => {
-    expect(() => {
-        new Event("EVENT", []);
-    }).toThrow();
+  expect(() => {
+    new Event("EVENT", []);
+  }).toThrow();
 });
 
 test('InValid Transformers', () => {
-    expect(() => {
-        new Event("EVENT", [123]);
-    }).toThrow();
+  expect(() => {
+    new Event("EVENT", [123]);
+  }).toThrow();
 });
 
 test('InValid Transformers', () => {
-    expect(() => {
-        new Event("EVENT", [{}]);
-    }).toThrow();
+  expect(() => {
+    new Event("EVENT", [{}]);
+  }).toThrow();
 });
 
 test('InValid Subscriber', () => {
-    expect(() => {
-        const e = new Event("EVENT", [() => {
-            return {"key": "value"}
-        }]);
-        e.subscribe(1)
-    }).toThrow();
+  expect(() => {
+    const e = new Event("EVENT", [() => {
+      return {"key": "value"}
+    }]);
+    e.subscribe(1)
+  }).toThrow();
 });
 
 test('InValid Subscriber', () => {
-    expect(() => {
-        const e = new Event("EVENT", [() => {
-            return {"key": "value"}
-        }]);
-        e.subscribe(null)
-    }).toThrow();
+  expect(() => {
+    const e = new Event("EVENT", [() => {
+      return {"key": "value"}
+    }]);
+    e.subscribe(null)
+  }).toThrow();
 });
 
 test('InValid Subscriber', () => {
-    expect(() => {
-        const e = new Event("EVENT", [() => {
-            return {"key": "value"}
-        }]);
-        e.subscribe("")
-    }).toThrow();
+  expect(() => {
+    const e = new Event("EVENT", [() => {
+      return {"key": "value"}
+    }]);
+    e.subscribe("")
+  }).toThrow();
 });
 
 test('InValid Subscriber', () => {
-    expect(() => {
-        const e = new Event("EVENT", [() => {
-        }]);
-        e.subscribe({})
-    }).toThrow();
+  expect(() => {
+    const e = new Event("EVENT", [() => {
+    }]);
+    e.subscribe({})
+  }).toThrow();
 });
 
 test('Valid Subscriber', () => {
-    const e = new Event("EVENT", [() => {
-        return {"key": "value"}
-    }]);
-    e.subscribe((data) => {
-        expect(data).toEqual(expect.objectContaining({
-            "key": expect.any(String)
-        }));
-    })
-    e.notify({"foo": "bar"})
+  const e = new Event("EVENT", [() => {
+    return {"key": "value"}
+  }]);
+  e.subscribe((data) => {
+    expect(data).toEqual(expect.objectContaining({
+      "key": expect.any(String)
+    }));
+  })
+  e.notify({"foo": "bar"})
 });
 
 test('Valid and Warn notify', () => {
-    const e = new Event("EVENT", [() => {
-        return {"key": "value"}
-    }]);
-    e.notify({"foo": "bar"})
+  const e = new Event("EVENT", [() => {
+    return {"key": "value"}
+  }]);
+  e.notify({"foo": "bar"})
 });
 
 test('Valid Subscriber', () => {
-    const e = new Event("EVENT");
-    e.subscribe((data) => {
-        expect(data).toEqual(expect.objectContaining({
-            "foo": expect.any(String)
-        }));
-    })
-    e.notify({"foo": "bar"})
+  const e = new Event("EVENT");
+  e.subscribe((data) => {
+    expect(data).toEqual(expect.objectContaining({
+      "foo": expect.any(String)
+    }));
+  })
+  e.notify({"foo": "bar"})
 });
 
 test('InValid event on the FluxStore: Duplicated event Name', () => {
-    expect(() => {
-        testStore.addEvent(EVENT_NAME);
-    }).toThrow();
+  expect(() => {
+    testStore.addEvent(EVENT_NAME);
+  }).toThrow();
 });
 
 test('InValid subscriber on the FluxStore: Subscriber must be a function', () => {
-    expect(() => {
-        testStore.subscribe(EVENT_NAME, 113);
-    }).toThrow();
+  expect(() => {
+    testStore.subscribe(EVENT_NAME, 113);
+  }).toThrow();
 });
 
 test('InValid subscriber on the FluxStore: Subscriber must be a function', () => {
-    expect(() => {
-        testStore.subscribe(EVENT_NAME, {});
-    }).toThrow();
+  expect(() => {
+    testStore.subscribe(EVENT_NAME, {});
+  }).toThrow();
 });
 
 test('InValid subscriber on the FluxStore: Unknown event', () => {
-    expect(() => {
-        testStore.subscribe("SOME OTHER EVENT NAME THAT DOES NOT EXISTS");
-    }).toThrow();
+  expect(() => {
+    testStore.subscribe("SOME OTHER EVENT NAME THAT DOES NOT EXISTS");
+  }).toThrow();
 });
 
 test('InValid subscriber on the FluxStore: Unknown event', () => {
-    expect(() => {
-        testStore.subscribe("SOME OTHER EVENT NAME THAT DOES NOT EXISTS", () => {});
-    }).toThrow();
+  expect(() => {
+    testStore.subscribe("SOME OTHER EVENT NAME THAT DOES NOT EXISTS", () => {
+    });
+  }).toThrow();
 });
 
 
@@ -272,17 +280,17 @@ testStore.clearState();
 const anotherEeventValue = testStore.getState(EVENT_NAME);
 
 test('testState should be null after clearing the FluxStore', () => {
-    console.log(anotherEeventValue);
-    expect(anotherEeventValue).toBe(null);
+  console.log(anotherEeventValue);
+  expect(anotherEeventValue).toBe(null);
 });
 
 
 testAction();
 test('Should call the subscriber immediately', () => {
-    testStore.subscribe(EVENT_NAME, (data) => {
-        console.log("EUREKA");
-        expect(data).toEqual(expect.objectContaining({
-            "foo": expect.any(String)
-        }));
-    }, true);
+  testStore.subscribe(EVENT_NAME, (data) => {
+    console.log("EUREKA");
+    expect(data).toEqual(expect.objectContaining({
+      "foo": expect.any(String)
+    }));
+  }, true);
 });
